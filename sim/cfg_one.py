@@ -42,7 +42,7 @@ cfg.checkErrors = False
 # Recording 
 #------------------------------------------------------------------------------
 
-allpops = ['L1_1', 'L1_2', 'L1_3', 'L1_4']
+allpops = []
 cfg.cellsrec = 1
 if cfg.cellsrec == 0:  cfg.recordCells = ['allpops'] # record all cells
 elif cfg.cellsrec == 1: cfg.recordCells = [(pop,0) for pop in allpops] # record one cell of each pop

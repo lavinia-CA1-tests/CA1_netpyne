@@ -30,59 +30,42 @@ netParams.defaultDelay = 2.0 # default conn delay (ms)
 netParams.propVelocity = 500.0 # propagation velocity (um/ms)
 
 #------------------------------------------------------------------------------
-# loadTemplateName
-#------------------------------------------------------------------------------
-rootFolder = '/home/fernando/S1detailed/'
-os.chdir(rootFolder)
-folder = os.listdir('cell_data/')
-folder = sorted(folder)
-
-def loadTemplateName(cellnumber):     
-    outFolder = rootFolder+'cell_data/'+folder[cellnumber]
-    f = open(outFolder+'/template.hoc', 'r')
-    for line in f.readlines():
-        if 'begintemplate' in line:
-            templatename = str(line)     
-    templatename=templatename[:-1]        
-    templatename=templatename[14:]
-    return templatename
-
-
-#------------------------------------------------------------------------------
 # Cell parameters
 #------------------------------------------------------------------------------
-cellnumber=0
-cellName = folder[cellnumber]
-cellTemplateName = loadTemplateName(cellnumber)
-cellRule = netParams.importCellParams(label=cellName + '_rule', somaAtOrigin=False,
-    conds={'cellType': cellName, 'cellModel': 'HH_full'},
-    fileName='cellwrapper.py',
-    cellName='loadCell',
-    cellInstance = True,
-    cellArgs={'cellName': cellName, 'cellTemplateName': cellTemplateName})
+cellModels = ['HH_reduced', 'HH_full']
+layer = {'Ori':[0.0, 0.1], 'Pyr':[0.1, 0.2], 'Rad':[0.2, 0.8], 'LM':[0.8, 1.0], 'Ca3':[2.0, 3.0], 'EC':[5.0, 6.0]}  # normalized layer boundaries
 
-os.chdir(rootFolder)
+
+cellTypes = ['axoaxoniccell',  'bistratifiedcell',  'cckcell',  'ivycell',  'ngfcell',  'olmcell',  'poolosyncell',
+ 'pvbasketcell',  'scacell']
 
 cellnumber=0
-cellName1 = folder[cellnumber]
-cellTemplateName1 = loadTemplateName(cellnumber)
+for cellType in cellTypes:
 
-cellRule = netParams.importCellParams(label=cellName1 + '_rule', somaAtOrigin=False,
-    conds={'cellType': cellName1, 'cellModel': 'HH_full'},
-    fileName='cellwrapper.py',
-    cellName='loadCell',
-    cellInstance = True,
-    cellArgs={'cellName': cellName1, 'cellTemplateName': cellTemplateName1})
+    if cellType == 'poolosyncell':
+        cellRule = netParams.importCellParams(label='cell' + str(cellnumber), conds={'cellType':cellType, 'cellModel':'HH_full'}, 
+            fileName='cell_data/class_' + cellName + '.hoc', cellName=cellType, cellInstance = True)
+    else:
+        cellRule = netParams.importCellParams(label='cell' + str(cellnumber), conds={'cellType':cellType, 'cellModel':'HH_reduced'}, 
+            fileName='cell_data/class_' + cellName + '.hoc', cellName=cellType, cellInstance = True)
 
-os.chdir(rootFolder)
+    cellnumber = cellnumber + 1
 #------------------------------------------------------------------------------
 # Population parameters
 #------------------------------------------------------------------------------
 
-netParams.popParams['L1_1'] = {'cellType': cellName, 'cellModel': 'HH_full', 'numCells': 1} 
-netParams.popParams['L1_2'] = {'cellType': cellName, 'cellModel': 'HH_full', 'numCells': 1} 
-netParams.popParams['L1_3'] = {'cellType': cellName, 'cellModel': 'HH_full', 'numCells': 1} 
-netParams.popParams['L1_4'] = {'cellType': cellName, 'cellModel': 'HH_full', 'numCells': 1} 
+netParams.popParams['olmcell'] = {'cellType': 'olmcell', 'ynormRange': layer['Ori'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+
+netParams.popParams['poolosyncell'] = {'cellType': 'poolosyncell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_full', 'numCells': 1} 
+netParams.popParams['axoaxoniccell'] = {'cellType': 'axoaxoniccell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+netParams.popParams['bistratifiedcell'] = {'cellType': 'bistratifiedcell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+netParams.popParams['cckcell'] = {'cellType': 'cckcell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+netParams.popParams['ivycell'] = {'cellType': 'ivycell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+netParams.popParams['pvbasketcell'] = {'cellType': 'pvbasketcell', 'ynormRange': layer['Pyr'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+
+netParams.popParams['scacell'] = {'cellType': 'scacell', 'ynormRange': layer['Rad'], 'cellModel': 'HH_reduced', 'numCells': 1} 
+
+netParams.popParams['ngfcell'] = {'cellType': 'ngfcell', 'ynormRange': layer['LM'], 'cellModel': 'HH_reduced', 'numCells': 1} 
 
 #------------------------------------------------------------------------------
 # Current inputs (IClamp)
