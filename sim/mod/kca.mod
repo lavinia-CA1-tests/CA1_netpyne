@@ -25,13 +25,11 @@ TITLE Slow Ca-dependent potassium current
                             :   modifications by Yiota Poirazi 2001 (poirazi@LNC.usc.edu)
 			    :   taumin = 0.5 ms instead of 0.1 ms	
 
-                            INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
-
                             NEURON {
                                     SUFFIX kca
                                     USEION k READ ek WRITE ik
                                     USEION ca READ cai
-                                    RANGE gk, gbar, m_inf, tau_m
+                                    RANGE gk, gbar, m_inf, tau_m,ik
                                     GLOBAL beta, cac
                             }
 
@@ -51,7 +49,7 @@ TITLE Slow Ca-dependent potassium current
                                     cai     = 2.4e-5 (mM)           : initial [Ca]i
                                     gbar    = 0.01   (mho/cm2)
                                     beta    = 0.03   (1/ms)          : backward rate constant
-                                    cac     = 0.025  (mM)            : middle point of activation fct
+                                    cac     = 0.00035  (mM)            : middle point of activation fct
        				    taumin  = 0.5    (ms)            : minimal value of the time cst
                                     gk
                                   }
@@ -88,7 +86,7 @@ TITLE Slow Ca-dependent potassium current
                             }
 
                             PROCEDURE evaluate_fct(v(mV),cai(mM)) {  LOCAL car
-                                    car = (cai/cac)^2
+                                    car = (cai/cac)^4
                                     m_inf = car / ( 1 + car )      : activation steady state value
                                     tau_m =  1 / beta / (1 + car) / tadj
                                     if(tau_m < taumin) { tau_m = taumin }   : activation min value of time cst
