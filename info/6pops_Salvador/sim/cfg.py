@@ -9,7 +9,7 @@ cfg = specs.SimConfig()
 
 cfg.dt = 0.05                 # Internal integration timestep to use
 cfg.verbose = 0
-cfg.duration = 1.0e3
+cfg.duration = 1.0e2
 cfg.recordStim = True
 cfg.recordStep = 0.1             # Step size in ms to save data (e.g. V traces, LFP, etc)
 
