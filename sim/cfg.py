@@ -1,30 +1,24 @@
 from netpyne import specs
 
-#############################################
-####		SIMULATION PARAMETERS		#####
-#############################################
+cfg = specs.SimConfig()		
 
-#SIMDUR = STARTDEL + (THETA*8)	// simulation duration (msecs)
-cfg = specs.SimConfig() 
+#------------------------------------------------------------------------------
+# Options
+#------------------------------------------------------------------------------
 
-cfg.dt = 0.05                 # Internal integration timestep to use
-cfg.verbose = 0
-cfg.duration = 1.0e3
-cfg.recordStim = True
-cfg.recordStep = 0.1             # Step size in ms to save data (e.g. V traces, LFP, etc)
+cfg = specs.SimConfig()					            # object of class SimConfig to store simulation configuration
+cfg.duration = 1.31				            # Duration of the simulation, in ms
+cfg.dt = 0.01								                # Internal integration timestep to use
+cfg.verbose = False							                # Show detailed messages 
+cfg.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}}  # Dict with traces to record
+cfg.recordStep = 0.01 
+cfg.printRunTime = 0.1 # in sec			
 
-cfg.printRunTime = 0.1 # in sec
-cfg.printPopAvgRates = True
-
-cfg.seeds = {'conn': 1, 'stim': 1, 'loc': 1} # Seeds for randomizers (connectivity, input stimulation and cell locations)
-cfg.hParams['celsius'] = 34.
-
-cfg.allpops = ['Pyramidal','OLM','BS','Basket','AA']
-
-cfg.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}} #, 'V_lmT':{'sec':'lm_thick1','loc':0.5,'var':'v'}}  # Dict with traces to record
-cfg.analysis['plotTraces'] = {'include': [('Pyramidal',[10,50,90]),('AA',0),('Basket',[0,1]),('OLM',0),('BS',0)],'saveFig': True, 'oneFigPer':'trace', 'overlay': False, 'figSize':(18,12)}
-cfg.analysis['plotRaster'] = {'saveFig': True, 'showFig': False, 'orderInverse': True, 'figSize': (18,12), 'labels': 'legend', 'popRates': True, 'fontSize':9, 'lw': 2, 'markerSize':4, 'marker': '.', 'dpi': 300} 
-cfg.analysis['plot2Dnet'] = {'saveFig': True}
+cfg.seeds = {'conn': 1333, 'stim': 1333, 'loc': 1333} 
+cfg.hParams = {'celsius': 34, 'v_init': -65}  
+cfg.verbose = False
+cfg.createNEURONObj = True
+cfg.createPyStruct = True  
 #------------------------------------------------------------------------------
 # Saving
 #------------------------------------------------------------------------------
@@ -36,14 +30,13 @@ cfg.saveJson = True	           	## Save json file
 cfg.saveDataInclude = ['simData'] ## 'simData' , 'simConfig', 'netParams'
 cfg.backupCfgFile = None 		##  
 cfg.gatherOnlySimData = False	##  
-cfg.saveCellSecs = False			
+cfg.saveCellSecs = True			
 cfg.saveCellConns = True	
 
-#cfg.saveJson=True
-#cfg.saveMat=True
+#------------------------------------------------------------------------------
+# ploting
+#------------------------------------------------------------------------------
+# cfg.analysis['plotTraces'] = {'include': [0,1,2,3,4,5,6,7,8,9,10,11], 'timeRange': [400,1000], 'ylim': [-90,30], 'saveFig': True, 'showFig': True, 'figSize':(12,4)} # Plot recorded traces for this list of cells
+cfg.analysis['plotShape'] = {'includePre': [n for n in range(0,24,1)],'includePost': [n for n in range(0,24,1)], 'includeAxon': False, 'saveFig': True, 'showFig': True, 'figSize':(22,22)}
+# cfg.analysis['plot2Dnet'] = {'view':'xy','saveFig': '../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xy_.png', 'showFig': True, 'figSize':(16,16), 'fontSize': 10}
 
-# cfg.recordLFP = [[netParams.sizeX/2, netParams.sizeY*1/4, netParams.sizeZ/2], 
-# 						[netParams.sizeX/2, netParams.sizeY*2/4, netParams.sizeZ/2],
-# 						[netParams.sizeX/2, netParams.sizeY*3/4, netParams.sizeZ/2]]
-
-# cfg.recordLFP = [[x,y,z] for x in range(900, netParams.sizeX, 900) for y in range(40, netParams.sizeY, 40) for z in range(40, netParams.sizeZ, 40)]
