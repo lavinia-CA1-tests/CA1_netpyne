@@ -40,5 +40,5 @@ sim.analysis.plotData()         			# plot spike raster etc
 #sim.analysis.plotRaster(saveFig=True, labels = 'legend', popRates = True)
 
 # sim.analysis.plotShape(includePre=[0,1,2,3,4,5,6,7,8,9,10,11], includePost=[0,1,2,3,4,5,6,7,8,9,10,11], showFig=True, saveFig=True)
-sim.analysis.plot2Dnet(saveData='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xy.json', saveFig='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xy.png', view='xy', figSize=(24,24), fontSize=17)
-sim.analysis.plot2Dnet(saveData='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xz.json', saveFig='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xz.png', view='xz', figSize=(24,24), fontSize=17)
+# sim.analysis.plot2Dnet(saveData='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xy.json', saveFig='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xy.png', view='xy', figSize=(24,24), fontSize=17)
+# sim.analysis.plot2Dnet(saveData='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xz.json', saveFig='../data/'+cfg.simLabel[0:9]+'/'+cfg.simLabel +'_xz.png', view='xz', figSize=(24,24), fontSize=17)

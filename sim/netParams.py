@@ -19,11 +19,7 @@ except:
 layer = {'SO':[0.0, 0.258], 'SP':[0.258, 0.348], 'SR':[0.348, 0.773], 'SLM':[0.773, 1.0], 'CA3':[2.0,3.0], 'EC':[3.0, 4.0]}  # normalized layer boundaries
 
 # full import
-scalepopNum = 0.1
-# netParams.shape = 'cuboid' # cuboid (column-like) volume
-# netParams.sizeX=1200*np.sqrt(scalepopNum)
-# netParams.sizeZ=1260*np.sqrt(scalepopNum)
-# netParams.sizeY=660
+scalepopNum = 0.002
 
 # mc2 import
 netParams.shape = 'cylinder' # cylindrical (column-like) volume
@@ -44,13 +40,13 @@ print (popNumber)
 
 #------------------------------------------------------------------------------
 # to debug
-# popNumber['SP_PC'] = int(10)
-# Ca1_cellNumber = 0
-# for mtype in Mtypelist:    
-#     Ca1_cellNumber = Ca1_cellNumber + popNumber[mtype]
+popNumber['SP_PC'] = int(1)
+Ca1_cellNumber = 0
+for mtype in Mtypelist:    
+    Ca1_cellNumber = Ca1_cellNumber + popNumber[mtype]
 
-# print('scalepopNum =',scalepopNum,'  Ca1_cellNumber =',Ca1_cellNumber)
-# print (popNumber)
+print('scalepopNum =',scalepopNum,'  Ca1_cellNumber =',Ca1_cellNumber)
+print (popNumber)
 
 #------------------------------------------------------------------------------
 # IMPORT CELL PARAMETERS
@@ -147,12 +143,33 @@ for cellName in cellParamLabels:
 	netParams.popParams[cellName] = {'cellType': cellName, 'numCells': 1, 'ynormRange': layer[celllayer], 'cellModel': 'HH_full'}
 
 #------------------------------------------------------------------------------
-#	NETWORK CONNECTIONS	
+# SYNAPTIC MECHANISMS	
 #------------------------------------------------------------------------------
+#Pre-syn: PC
+netParams.synMechParams['PC_PC']= {'mod':'DetAMPANMDA', 'tau_r_AMPA':0.2, 'tau_d_AMPA':3.0, 'e':0.0, 'tau_r_NMDA': 9.0, 'tau_d_NMDA': 61.0, 'Use': 0.5,'Dep': 671.0, 'Fac': 17.0, 'NMDA_ratio': 1.22}
+netParams.synMechParams['PC_BC']= {'mod':'DetAMPANMDA', 'tau_r_AMPA':0.2, 'tau_d_AMPA':4.12, 'e':0.0, 'tau_r_NMDA': 9.0, 'tau_d_NMDA': 100.0, 'Use': 0.23,'Dep': 410.0, 'Fac': 10.0, 'NMDA_ratio': 1.22}
 
 #------------------------------------------------------------------------------
-# DESCRIPTION OF SYNAPTIC MECHANISMS	
+#	NETWORK CONNECTIONS	
 #------------------------------------------------------------------------------
+#######################
+##presyn = Pyramidal 
+#######################
+
+for pre in cellParamLabels:	
+	for post in cellParamLabels:
+		netParams.connParams[pre + '->' + post] = {
+			'preConds': {'pop': pre},
+			'postConds': {'pop': post},
+			# 'sec': postsynDict[postsynList[i]],
+			'synsPerConn': 2,
+			'synMech': 'BC_PC',
+			'weight': 1.5,
+			'delay': 0.5
+			}
+		if pre=='SP_PC_cACpyr_mc2_0':
+			netParams.connParams[pre + '->' + post]['synMech'] = 'PC_PC'
+
 
 #------------------------------------------------------------------------------
 # Stimulus
