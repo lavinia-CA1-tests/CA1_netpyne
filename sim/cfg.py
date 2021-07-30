@@ -1,24 +1,57 @@
 from netpyne import specs
 
-cfg = specs.SimConfig()		
+cfg = specs.SimConfig()					            # object of class SimConfig to store simulation configuration
+#------------------------------------------------------------------------------
+#
+# SIMULATION CONFIGURATION
+#
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# Run parameters
+#------------------------------------------------------------------------------
+cfg.duration = 1131.0 # Duration of the sim, in ms  
+cfg.dt = 0.025 # Internal integration timestep to use
+cfg.seeds = {'conn': 1333, 'stim': 1333, 'loc': 1333} 
+cfg.hParams = {'celsius': 34, 'v_init': -70}  # -65
+cfg.verbose = False
+cfg.createNEURONObj = True
+cfg.createPyStruct = True  
+cfg.cvode_active = False
+cfg.cvode_atol = 1e-6
+cfg.cache_efficient = True
+
+cfg.printRunTime = 0.1 # in sec	
+
+cfg.includeParamsLabel = False
+cfg.printPopAvgRates = True
+
+cfg.checkErrors = False
+
+
+#------------------------------------------------------------------------------
+# Cells
+#------------------------------------------------------------------------------
+cfg.rootFolder = os.getcwd()
+
+cfg.CellImportMode = 'template' # 'pkl'
+cfg.celldiversity = True 
+
+cfg.poptypeNumber = 8 # max 55 PAREI AQUI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cfg.celltypeNumber = 12 # max 207
+    
+cfg.popParamLabels = ['L2e', 'L2i', 'L4e', 'L4i', 'L5e', 'L5i', 'L6e', 'L6i'] # to debug
+cfg.cellParamLabels = ['L2e', 'L2i_BC', 'L2i_MC', 'L4e', 'L4i_BC', 'L4i_MC', 'L5e', 'L5i_BC', 'L5i_MC', 'L6e', 'L6i_BC', 'L6i_MC']
+
 
 #------------------------------------------------------------------------------
 # Options
 #------------------------------------------------------------------------------
 
-cfg = specs.SimConfig()					            # object of class SimConfig to store simulation configuration
-cfg.duration = 1131.0			            # Duration of the simulation, in ms
-cfg.dt = 0.01								                # Internal integration timestep to use
-cfg.verbose = False							                # Show detailed messages 
 cfg.recordTraces = {'V_soma':{'sec':'soma','loc':0.5,'var':'v'}}  # Dict with traces to record
 cfg.recordStep = 0.01 
-cfg.printRunTime = 0.1 # in sec			
-
 cfg.seeds = {'conn': 1333, 'stim': 1333, 'loc': 1333} 
 cfg.hParams = {'celsius': 34, 'v_init': -65}  
-cfg.verbose = False
-cfg.createNEURONObj = True
-cfg.createPyStruct = True  
 #------------------------------------------------------------------------------
 # Saving
 #------------------------------------------------------------------------------
